@@ -70,3 +70,5 @@ func gpio_output_set(gpio *gpio_t, pin uint8, output uint8) {
 	gpio.fsel[regnum] &= ^(0x7 << offset)
 	gpio.fsel[regnum] |= ((function & 0x7) << offset)
 }
+
+// **** </gpio.h> ****
