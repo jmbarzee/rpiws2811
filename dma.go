@@ -35,12 +35,8 @@ const (
 	RPI_DMA_CS_ACTIVE                     = (1 << 0)
 )
 
-func RPI_DMA_CS_PANIC_PRIORITY(val int) int {
-	return (val & 0xf) << 20
-}
-func RPI_DMA_CS_PRIORITY(val int) int {
-	return (val & 0xf) << 16
-}
+func RPI_DMA_CS_PANIC_PRIORITY(val int) int { return (val & 0xf) << 20 }
+func RPI_DMA_CS_PRIORITY(val int) int       { return (val & 0xf) << 16 }
 
 const (
 	RPI_DMA_TI_NO_WIDE_BURSTS = (1 << 26)
@@ -60,15 +56,9 @@ const (
 	RPI_DMA_TI_INTEN       = (1 << 0)
 )
 
-func RPI_DMA_TI_WAITS(val int) int {
-	return (val & 0x1f) << 21
-}
-func RPI_DMA_TI_PERMAP(val int) int {
-	return (val & 0x1f) << 16
-}
-func RPI_DMA_TI_BURST_LENGTH(val int) int {
-	return (val & 0xf) << 12
-}
+func RPI_DMA_TI_WAITS(val int) int        { return (val & 0x1f) << 21 }
+func RPI_DMA_TI_PERMAP(val int) int       { return (val & 0x1f) << 16 }
+func RPI_DMA_TI_BURST_LENGTH(val int) int { return (val & 0xf) << 12 }
 
 /*
  * DMA register set
@@ -89,48 +79,40 @@ type dma_t struct {
 	debug     uint32
 } // TODO @jmbarzee  __attribute__((packed, aligned(4)))
 
-func RPI_DMA_TXFR_LEN_YLENGTH(val int) int {
-	return (val & 0xffff) << 16
-}
-func RPI_DMA_TXFR_LEN_XLENGTH(val int) int {
-	return (val & 0xffff) << 0
-}
+func RPI_DMA_TXFR_LEN_YLENGTH(val int) int { return (val & 0xffff) << 16 }
+func RPI_DMA_TXFR_LEN_XLENGTH(val int) int { return (val & 0xffff) << 0 }
 
-func RPI_DMA_STRIDE_D_STRIDE(val int) int {
-	return (val & 0xffff) << 16
-}
-func RPI_DMA_STRIDE_S_STRIDE(val int) int {
-	return ((val & 0xffff) << 0)
-}
+func RPI_DMA_STRIDE_D_STRIDE(val int) int { return (val & 0xffff) << 16 }
+func RPI_DMA_STRIDE_S_STRIDE(val int) int { return ((val & 0xffff) << 0) }
 
 const (
-	DMA0_OFFSET  = (0x00007000)
-	DMA1_OFFSET  = (0x00007100)
-	DMA2_OFFSET  = (0x00007200)
-	DMA3_OFFSET  = (0x00007300)
-	DMA4_OFFSET  = (0x00007400)
-	DMA5_OFFSET  = (0x00007500)
-	DMA6_OFFSET  = (0x00007600)
-	DMA7_OFFSET  = (0x00007700)
-	DMA8_OFFSET  = (0x00007800)
-	DMA9_OFFSET  = (0x00007900)
-	DMA10_OFFSET = (0x00007a00)
-	DMA11_OFFSET = (0x00007b00)
-	DMA12_OFFSET = (0x00007c00)
-	DMA13_OFFSET = (0x00007d00)
-	DMA14_OFFSET = (0x00007e00)
-	DMA15_OFFSET = (0x00e05000)
+	DMA0_OFFSET  = 0x00007000
+	DMA1_OFFSET  = 0x00007100
+	DMA2_OFFSET  = 0x00007200
+	DMA3_OFFSET  = 0x00007300
+	DMA4_OFFSET  = 0x00007400
+	DMA5_OFFSET  = 0x00007500
+	DMA6_OFFSET  = 0x00007600
+	DMA7_OFFSET  = 0x00007700
+	DMA8_OFFSET  = 0x00007800
+	DMA9_OFFSET  = 0x00007900
+	DMA10_OFFSET = 0x00007a00
+	DMA11_OFFSET = 0x00007b00
+	DMA12_OFFSET = 0x00007c00
+	DMA13_OFFSET = 0x00007d00
+	DMA14_OFFSET = 0x00007e00
+	DMA15_OFFSET = 0x00e05000
 
-	PAGE_SIZE = (1 << 12)
-	PAGE_MASK = (^(PAGE_SIZE - 1))
+	PAGE_SIZE = 1 << 12
+	PAGE_MASK = ^(PAGE_SIZE - 1)
 )
 
-func PAGE_OFFSET(page int) int {
-	return (page & (PAGE_SIZE - 1))
-}
+func PAGE_OFFSET(page int) int { return (page & (PAGE_SIZE - 1)) }
 
 // **** </dma.h> ****
+
 // **** <dma.c> ****
+
 var dma_offset = []uint32{
 	DMA0_OFFSET,
 	DMA1_OFFSET,
