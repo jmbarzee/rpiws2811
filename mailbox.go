@@ -47,7 +47,7 @@ func _IOC(inout uint32, group uint32, num uint32, len uint32) uint32 {
 // **** </mailbox.h> ****
 // **** <mailbox.c> ****
 
-func mapmem(base uint32, memLength uint32, mem_dev string) unsafe.Pointer {
+func mapmem(base uint32, memLength uintptr, mem_dev string) unsafe.Pointer {
 	offsetmask := uint32(os.Getpagesize() - 1)
 	pagemask := ^uint32(0) ^ offsetmask
 	var mem_fd uintptr
@@ -77,7 +77,7 @@ func mapmem(base uint32, memLength uint32, mem_dev string) unsafe.Pointer {
 	return unsafe.Pointer(uintptr(unsafe.Pointer(&bytes[0])) + offset)
 }
 
-func unmapmem(addr unsafe.Pointer, size uint32) {
+func unmapmem(addr unsafe.Pointer, size uintptr) {
 	offsetmask := uint32(os.Getpagesize() - 1)
 	pagemask := ^uint32(0) ^ offsetmask
 	baseaddr := uintptr(uint32(uintptr(addr)) & pagemask)

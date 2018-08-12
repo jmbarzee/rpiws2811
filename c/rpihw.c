@@ -353,7 +353,7 @@ const rpi_hw_t *rpi_hw_detect(void)
 
                 // Take out warranty and manufacturer bits
                 hwver &= ~(RPI_WARRANTY_MASK | RPI_MANUFACTURER_MASK);
-                rev &= ~(RPI_WARRANTY_MASK | RPI_MANUFACTURER_MASK);
+                rev = rev & ~(RPI_WARRANTY_MASK | RPI_MANUFACTURER_MASK);
                 
                 if (rev == hwver)
                 {

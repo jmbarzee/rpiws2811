@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"regexp"
+	"strconv"
 )
 
 // **** <rpihw.h> ****
@@ -275,37 +276,42 @@ var rpi_hw_info = []rpi_hw_t{
 }
 
 func rpi_hw_detect() (*rpi_hw_t, error) {
-	cpuiInfoPath := "/proc/cpuinfo"
-	file, err := os.OpenFile(cpuiInfoPath, os.O_RD, 0)
+	cpuInfoPath := "/proc/cpuinfo"
+	file, err := os.OpenFile(cpuInfoPath, os.O_RDONLY, 0)
 	defer file.Close()
 	if err != nil {
-		log.Printf("Can't open %v", cpuiInfoPath)
+		log.Printf("Can't open %v", cpuInfoPath)
 		return nil, err
 	}
-	b, err := ioutil.ReadAll(f)
+	b, err := ioutil.ReadAll(file)
 	if err != nil {
-		log.Printf("Can't read all from %v", cpuiInfoPath)
+		log.Printf("Can't read all from %v", cpuInfoPath)
 		return nil, err
 	}
-	var regex = regexp.MustCompile(`Revision.*: (.*)`)
+	regex := regexp.MustCompile(`Revision.*: (.*)`)
 
-	all := regex.FindSubmatch([]byte("Revision  : 1ab246"))
+	//all := regex.FindSubmatch([]byte("Revision  : 1ab246"))
+	all := regex.FindSubmatch(b)
 	if len(all) < 2 {
-		err = fmt.Errorf("Can't find revsion number %v", cpuiInfoPath)
+		err = fmt.Errorf("Can't find revsion number %v", cpuInfoPath)
 		return nil, err
 	}
 	revString := all[1]
-	rev := string(revString[:len(revString)])
+	rev, err := strconv.ParseInt(string(revString), 0, 64)
+	if err != nil {
+		log.Printf("Can't parse int from %s", revString)
+		return nil, err
+	}
 
 	for _, rpi := range rpi_hw_info {
-		hwver := rpi_hw_info[i].hwver
+		hwver := rpi.hwver
 
 		// Take out warranty and manufacturer bits
-		hwver &= ^(RPI_WARRANTY_MASK | RPI_MANUFACTURER_MASK)
-		rev &= ^(RPI_WARRANTY_MASK | RPI_MANUFACTURER_MASK)
+		hwver = ^(^hwver | (RPI_WARRANTY_MASK | RPI_MANUFACTURER_MASK))
+		rev = ^(^rev | (RPI_WARRANTY_MASK | RPI_MANUFACTURER_MASK))
 
-		if rev == hwver {
-			return &rpi_hw_info[i], nil
+		if uint32(rev) == hwver {
+			return &rpi, nil
 		}
 	}
 	return nil, fmt.Errorf("couldn't find matching revision for %v in rpi_hw_info", rev)

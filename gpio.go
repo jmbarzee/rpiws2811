@@ -35,24 +35,24 @@ const (
 	GPIO_OFFSET = 0x00200000
 )
 
-func gpio_function_set(gpio *gpio_t, pin uint8, function uint8) {
-	regnum := int(pin / 10)
-	offset := int((pin % 10) * 3)
-	funcmap = []uint8{4, 5, 6, 7, 3, 2} // See datasheet for mapping
+func gpio_function_set(gpio *gpio_t, pin int, function int) {
+	regnum := uint32(pin / 10)
+	offset := uint32((pin % 10) * 3)
+	funcmap := []uint32{4, 5, 6, 7, 3, 2} // See datasheet for mapping
 
 	if function > 5 {
 		return
 	}
 
 	gpio.fsel[regnum] &= ^(0x7 << offset)
-	gpio.fsel[regnum] |= ((funcmap[function]) << offset)
+	gpio.fsel[regnum] |= uint32((funcmap[function]) << offset)
 }
 
 func gpio_level_set(gpio *gpio_t, pin uint8, level uint8) {
-	regnum = int(pin >> 5)
-	offset = int(pin & 0x1f)
+	regnum := uint32(pin >> 5)
+	offset := uint32(pin & 0x1f)
 
-	if level {
+	if level != 0 {
 		gpio.set[regnum] = (1 << offset)
 	} else {
 		gpio.clr[regnum] = (1 << offset)
@@ -60,15 +60,15 @@ func gpio_level_set(gpio *gpio_t, pin uint8, level uint8) {
 }
 
 func gpio_output_set(gpio *gpio_t, pin uint8, output uint8) {
-	regnum = int(pin / 10)
-	offset = int((pin % 10) * 3)
+	regnum := uint32(pin / 10)
+	offset := uint32((pin % 10) * 3)
 	function := uint8(0)
-	if output {
+	if output != 0 {
 		function = 1 // See datasheet for mapping
 	}
 
 	gpio.fsel[regnum] &= ^(0x7 << offset)
-	gpio.fsel[regnum] |= ((function & 0x7) << offset)
+	gpio.fsel[regnum] |= uint32((function & 0x7) << offset)
 }
 
 // **** </gpio.h> ****

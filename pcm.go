@@ -61,8 +61,8 @@ const (
 	// RPI_PCM_MODE_FSLEN
 )
 
-func RPI_PCM_MODE_FLEN(val int) int  { return ((val & 0x3ff) << 10) }
-func RPI_PCM_MODE_FSLEN(val int) int { return ((val & 0x3ff) << 0) }
+func RPI_PCM_MODE_FLEN(val int) uint32  { return uint32((val & 0x3ff) << 10) }
+func RPI_PCM_MODE_FSLEN(val int) uint32 { return uint32((val & 0x3ff) << 0) }
 
 const (
 	RPI_PCM_RXC_CH1WEX = 1 << 31
@@ -81,43 +81,43 @@ func RPI_PCM_RXC_CH2POS(val int) int { return ((val & 0x3ff) << 4) }
 func RPI_PCM_RXC_CH2WID(val int) int { return ((val & 0x0f) << 0) }
 
 const (
-	RPI_PCM_TXC_CH1WEX = 1 << 31
-	RPI_PCM_TXC_CH1EN  = 1 << 30
+	RPI_PCM_TXC_CH1WEX = uint32(1 << 31)
+	RPI_PCM_TXC_CH1EN  = uint32(1 << 30)
 	// RPI_PCM_TXC_CH1POS
 	// RPI_PCM_TXC_CH1WID
-	RPI_PCM_TXC_CH2WEX = 1 << 15
-	RPI_PCM_TXC_CH2EN  = 1 << 14
+	RPI_PCM_TXC_CH2WEX = uint32(1 << 15)
+	RPI_PCM_TXC_CH2EN  = uint32(1 << 14)
 	// RPI_PCM_TXC_CH2POS
 	// RPI_PCM_TXC_CH2WID
 )
 
-func RPI_PCM_TXC_CH1POS(val int) int { return (val & 0x3ff) << 20 }
-func RPI_PCM_TXC_CH1WID(val int) int { return (val & 0x0f) << 16 }
-func RPI_PCM_TXC_CH2POS(val int) int { return (val & 0x3ff) << 4 }
-func RPI_PCM_TXC_CH2WID(val int) int { return (val & 0x0f) << 0 }
+func RPI_PCM_TXC_CH1POS(val uint32) uint32 { return (val & 0x3ff) << 20 }
+func RPI_PCM_TXC_CH1WID(val uint32) uint32 { return (val & 0x0f) << 16 }
+func RPI_PCM_TXC_CH2POS(val uint32) uint32 { return (val & 0x3ff) << 4 }
+func RPI_PCM_TXC_CH2WID(val uint32) uint32 { return (val & 0x0f) << 0 }
 
-func RPI_PCM_DREQ_TX_PANIC(val int) int { return (val & 0x7f) << 24 }
-func RPI_PCM_DREQ_RX_PANIC(val int) int { return (val & 0x7f) << 16 }
-func RPI_PCM_DREQ_TX(val int) int       { return (val & 0x7f) << 8 }
-func RPI_PCM_DREQ_RX(val int) int       { return (val & 0x7f) << 0 }
+func RPI_PCM_DREQ_TX_PANIC(val uint32) uint32 { return (val & 0x7f) << 24 }
+func RPI_PCM_DREQ_RX_PANIC(val uint32) uint32 { return (val & 0x7f) << 16 }
+func RPI_PCM_DREQ_TX(val uint32) uint32       { return (val & 0x7f) << 8 }
+func RPI_PCM_DREQ_RX(val uint32) uint32       { return (val & 0x7f) << 0 }
 
 const (
-	RPI_PCM_INTEN_RXERR = 1 << 3
-	RPI_PCM_INTEN_TXERR = 1 << 2
-	RPI_PCM_INTEN_RXR   = 1 << 1
-	RPI_PCM_INTEN_TXW   = 1 << 0
+	RPI_PCM_INTEN_RXERR = uint32(1 << 3)
+	RPI_PCM_INTEN_TXERR = uint32(1 << 2)
+	RPI_PCM_INTEN_RXR   = uint32(1 << 1)
+	RPI_PCM_INTEN_TXW   = uint32(1 << 0)
 
-	RPI_PCM_INTSTC_RXERR = 1 << 3
-	RPI_PCM_INTSTC_TXERR = 1 << 2
-	RPI_PCM_INTSTC_RXR   = 1 << 1
-	RPI_PCM_INTSTC_TXW   = 1 << 0
+	RPI_PCM_INTSTC_RXERR = uint32(1 << 3)
+	RPI_PCM_INTSTC_TXERR = uint32(1 << 2)
+	RPI_PCM_INTSTC_RXR   = uint32(1 << 1)
+	RPI_PCM_INTSTC_TXW   = uint32(1 << 0)
 
 	// RPI_PCM_GRAY_RXFIFOLEVEL
 	// RPI_PCM_GRAY_FLUSHED
 	// RPI_PCM_GRAY_RXLEVEL
-	RPI_PCM_GRAY_FLUSH = 1 << 2
-	RPI_PCM_GRAY_CLR   = 1 << 1
-	RPI_PCM_GRAY_EN    = 1 << 0
+	RPI_PCM_GRAY_FLUSH = uint32(1 << 2)
+	RPI_PCM_GRAY_CLR   = uint32(1 << 1)
+	RPI_PCM_GRAY_EN    = uint32(1 << 0)
 )
 
 func RPI_PCM_GRAY_RXFIFOLEVEL(val int) int { return (val & 0x3f) << 16 }
@@ -154,7 +154,7 @@ type pcm_pin_table_t struct {
 
 type pcm_pin_tables_t struct {
 	count int
-	pins  *pcm_pin_table_t
+	pins  []pcm_pin_table_t
 }
 
 // **** </pcm.h> ****
@@ -201,17 +201,17 @@ var pcm_pin_dout = []pcm_pin_table_t{
 		altnum: 2},
 }
 
-var pcm_pin_tables = [NUM_PCMFUNS]pcm_pin_table_t{
-	pcm_pin_table_t{
+var pcm_pin_tables = [NUM_PCMFUNS]pcm_pin_tables_t{
+	pcm_pin_tables_t{
 		pins:  pcm_pin_clk,
 		count: len(pcm_pin_clk)},
-	pcm_pin_table_t{
+	pcm_pin_tables_t{
 		pins:  pcm_pin_fs,
 		count: len(pcm_pin_fs)},
-	pcm_pin_table_t{
+	pcm_pin_tables_t{
 		pins:  pcm_pin_din,
 		count: len(pcm_pin_din)},
-	pcm_pin_table_t{
+	pcm_pin_tables_t{
 		pins:  pcm_pin_dout,
 		count: len(pcm_pin_dout)},
 }
@@ -220,11 +220,11 @@ func pcm_pin_alt(pcmfun int, pinnum int) (int, error) {
 	if pcmfun < 0 || pcmfun > 3 {
 		return 0, fmt.Errorf("pcmfun out of acceptable range: %v", pcmfun)
 	}
-	pintable := &pcm_pin_tables[pcmfun]
+	pins := pcm_pin_tables[pcmfun].pins
 
-	for _, pin := range pintable[pins] {
+	for _, pin := range pins {
 		if pin.pinnum == pinnum {
-			return pins.altnum, nil
+			return pin.altnum, nil
 		}
 	}
 

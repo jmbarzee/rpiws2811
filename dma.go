@@ -10,8 +10,8 @@ package rpiws2811
  */
 type dma_cb_t struct {
 	ti         uint32
-	source_ad  uint32
-	dest_ad    uint32
+	source_ad  uintptr
+	dest_ad    uintptr
 	txfr_len   uint32
 	stride     uint32
 	nextconbk  uint32
@@ -19,46 +19,46 @@ type dma_cb_t struct {
 } // TODO @jmbarzee __attribute__((packed, aligned(4)))
 
 const (
-	RPI_DMA_CS_RESET                   = (1 << 31)
-	RPI_DMA_CS_ABORT                   = (1 << 30)
-	RPI_DMA_CS_DISDEBUG                = (1 << 29)
-	RPI_DMA_CS_WAIT_OUTSTANDING_WRITES = (1 << 28)
+	RPI_DMA_CS_RESET                   = uint32((1 << 31))
+	RPI_DMA_CS_ABORT                   = uint32((1 << 30))
+	RPI_DMA_CS_DISDEBUG                = uint32((1 << 29))
+	RPI_DMA_CS_WAIT_OUTSTANDING_WRITES = uint32((1 << 28))
 	// RPI_DMA_CS_PANIC_PRIORITY
 	// RPI_DMA_CS_PRIORITY
-	RPI_DMA_CS_ERROR                      = (1 << 8)
-	RPI_DMA_CS_WAITING_OUTSTANDING_WRITES = (1 << 6)
-	RPI_DMA_CS_DREQ_STOPS_DMA             = (1 << 5)
-	RPI_DMA_CS_PAUSED                     = (1 << 4)
-	RPI_DMA_CS_DREQ                       = (1 << 3)
-	RPI_DMA_CS_INT                        = (1 << 2)
-	RPI_DMA_CS_END                        = (1 << 1)
-	RPI_DMA_CS_ACTIVE                     = (1 << 0)
+	RPI_DMA_CS_ERROR                      = uint32((1 << 8))
+	RPI_DMA_CS_WAITING_OUTSTANDING_WRITES = uint32((1 << 6))
+	RPI_DMA_CS_DREQ_STOPS_DMA             = uint32((1 << 5))
+	RPI_DMA_CS_PAUSED                     = uint32((1 << 4))
+	RPI_DMA_CS_DREQ                       = uint32((1 << 3))
+	RPI_DMA_CS_INT                        = uint32((1 << 2))
+	RPI_DMA_CS_END                        = uint32((1 << 1))
+	RPI_DMA_CS_ACTIVE                     = uint32((1 << 0))
 )
 
-func RPI_DMA_CS_PANIC_PRIORITY(val int) int { return (val & 0xf) << 20 }
-func RPI_DMA_CS_PRIORITY(val int) int       { return (val & 0xf) << 16 }
+func RPI_DMA_CS_PANIC_PRIORITY(val uint32) uint32 { return (val & 0xf) << 20 }
+func RPI_DMA_CS_PRIORITY(val uint32) uint32       { return (val & 0xf) << 16 }
 
 const (
-	RPI_DMA_TI_NO_WIDE_BURSTS = (1 << 26)
+	RPI_DMA_TI_NO_WIDE_BURSTS = uint32(1 << 26)
 	// RPI_DMA_TI_WAITS
 	// RPI_DMA_TI_PERMAP
 	// RPI_DMA_TI_BURST_LENGTH
-	RPI_DMA_TI_SRC_IGNORE  = (1 << 11)
-	RPI_DMA_TI_SRC_DREQ    = (1 << 10)
-	RPI_DMA_TI_SRC_WIDTH   = (1 << 9)
-	RPI_DMA_TI_SRC_INC     = (1 << 8)
-	RPI_DMA_TI_DEST_IGNORE = (1 << 7)
-	RPI_DMA_TI_DEST_DREQ   = (1 << 6)
-	RPI_DMA_TI_DEST_WIDTH  = (1 << 5)
-	RPI_DMA_TI_DEST_INC    = (1 << 4)
-	RPI_DMA_TI_WAIT_RESP   = (1 << 3)
-	RPI_DMA_TI_TDMODE      = (1 << 1)
-	RPI_DMA_TI_INTEN       = (1 << 0)
+	RPI_DMA_TI_SRC_IGNORE  = uint32(1 << 11)
+	RPI_DMA_TI_SRC_DREQ    = uint32(1 << 10)
+	RPI_DMA_TI_SRC_WIDTH   = uint32(1 << 9)
+	RPI_DMA_TI_SRC_INC     = uint32(1 << 8)
+	RPI_DMA_TI_DEST_IGNORE = uint32(1 << 7)
+	RPI_DMA_TI_DEST_DREQ   = uint32(1 << 6)
+	RPI_DMA_TI_DEST_WIDTH  = uint32(1 << 5)
+	RPI_DMA_TI_DEST_INC    = uint32(1 << 4)
+	RPI_DMA_TI_WAIT_RESP   = uint32(1 << 3)
+	RPI_DMA_TI_TDMODE      = uint32(1 << 1)
+	RPI_DMA_TI_INTEN       = uint32(1 << 0)
 )
 
-func RPI_DMA_TI_WAITS(val int) int        { return (val & 0x1f) << 21 }
-func RPI_DMA_TI_PERMAP(val int) int       { return (val & 0x1f) << 16 }
-func RPI_DMA_TI_BURST_LENGTH(val int) int { return (val & 0xf) << 12 }
+func RPI_DMA_TI_WAITS(val uint32) uint32        { return (val & 0x1f) << 21 }
+func RPI_DMA_TI_PERMAP(val uint32) uint32       { return (val & 0x1f) << 16 }
+func RPI_DMA_TI_BURST_LENGTH(val uint32) uint32 { return (val & 0xf) << 12 }
 
 /*
  * DMA register set
